@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend  # Path to backend Dockerfile
+    container_name: fastapi_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/code  # Sync code for live changes
+    networks:
+      - app-network
+    environment:
+      - DATABASE_URL=postgresql://postgres:pass@db/postgres
+
+  frontend:
+    build:
+      context: ./frontend  # Path to frontend Dockerfile
+    container_name: vue_frontend
+    ports:
+      - "8080:8080"  # Maps Nginx's port 80 to 8080 on the host machine
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
