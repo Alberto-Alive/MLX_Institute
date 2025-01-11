@@ -1,0 +1,4 @@
+1.preprocess_data: draft to process the data
+2.multi_preprocess_data: process data with all cpu cores
+3.inspect_preprocessed_data: look at the data
+4.clean_data: last script that allows you to specify subset size and saves the files to a folder: preprocessed_dataset which you can load as pairs in collate_fn and datalaoder functions
